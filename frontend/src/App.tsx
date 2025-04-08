@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getSectors, getUserData, saveUserData } from './api/api.ts';
 import {Sector} from "./types/type.ts";
+import emitter from "./emitter/eventEmitter.ts";
+import LoadingSpinner from './components/LoadingSpinner.tsx';
 
 export default function App() {
     const [sectors, setSectors] = useState<Sector[]>([]);
@@ -10,9 +12,24 @@ export default function App() {
     const [agreed, setAgreed] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const startLoading = () => setLoading(true);
+        const stopLoading = () => setLoading(false);
+
+        emitter.on('startLoading', startLoading);
+        emitter.on('stopLoading', stopLoading);
+
+        return () => {
+            emitter.off('startLoading', startLoading);
+            emitter.off('stopLoading', stopLoading);
+        };
+    }, []);
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
             try {
                 const sectorsData = await getSectors();
                 setSectors(sectorsData);
@@ -24,6 +41,8 @@ export default function App() {
                 setAgreed(userData.agreed);
             } catch (error) {
                 console.error('Error during data fetching:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -48,6 +67,8 @@ export default function App() {
             return;
         }
 
+        setLoading(true);
+
         try {
             const saveMessage = await saveUserData(name, selectedSectors, agreed);
             setMessage(saveMessage);
@@ -59,11 +80,14 @@ export default function App() {
         } catch (error) {
             console.error('Error during save:', error);
             setMessage('An error occurred while saving.');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-400 to-slate-200 p-4">
+            {loading && <LoadingSpinner />}
             <form
                 onSubmit={handleSubmit}
                 className="w-full max-w-md bg-slate-50 shadow-md rounded-lg p-8 space-y-6"
