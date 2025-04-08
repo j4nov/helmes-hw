@@ -32,13 +32,17 @@ If environment variable is missing, edit the `.env` file to match your local env
 
 ### 3\. Create the Database
 
+NB! If you're using Windows add `php` before `bin/console` command in steps 3, 4 and 5.
+
 Create the database using the following command:
 
 `bin/console doctrine:database:create`
 
 ### 4\. Run Migrations
 
-To apply the migrations, run the following command:
+To apply the migrations, run the following commands:
+
+`bin/console make:migration`
 
 `bin/console doctrine:migrations:migrate`
 
@@ -49,6 +53,8 @@ This will create the necessary database schema.
 Once the migrations are complete, you need to populate the `sector` table with initial data. You can do this by running the following command:
 
 `bin/console doctrine:fixtures:load`
+
+Type `yes` to continue.
 
 This will load predefined data (e.g., sector names) into the `sector` table.
 
