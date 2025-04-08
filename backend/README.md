@@ -48,7 +48,7 @@ This will create the necessary database schema.
 
 Once the migrations are complete, you need to populate the `sector` table with initial data. You can do this by running the following command:
 
-`bin/console doctrine:fixtures:load`
+`php bin/console doctrine:fixtures:load`
 
 Type `yes` to continue.
 
