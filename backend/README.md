@@ -32,19 +32,15 @@ If environment variable is missing, edit the `.env` file to match your local env
 
 ### 3\. Create the Database
 
-NB! If you're using Windows add `php` before `bin/console` command in steps 3, 4 and 5.
-
 Create the database using the following command:
 
-`bin/console doctrine:database:create`
+`php bin/console doctrine:database:create`
 
-### 4\. Run Migrations
+### 4\. Build tables
 
-To apply the migrations, run the following commands:
+To build tables, run the following command:
 
-`bin/console make:migration`
-
-`bin/console doctrine:migrations:migrate`
+`php bin/console doctrine:schema:update --force`
 
 This will create the necessary database schema.
 
