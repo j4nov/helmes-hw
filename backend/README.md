@@ -59,3 +59,15 @@ This will load predefined data (e.g., sector names) into the `sector` table.
 If you want to run the Symfony server locally, use the Symfony CLI:
 
 `symfony serve`
+
+### 7\. Running Tests
+
+First run these commands to create test database:
+
+`php bin/console doctrine:database:create --env=test`
+
+`php bin/console doctrine:schema:update --env=test --force`
+
+Then you can right-click on test folder in PHPStorm and click `Run 'tests(PHPUnit)'`
+
+or run command `php vendor/bin/phpunit`
