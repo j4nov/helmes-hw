@@ -30,7 +30,7 @@ final class SectorController extends AbstractController
             return $this->json($sectors);
         } catch (\Exception $e) {
             $this->logger->error('Error fetching sectors: ' . $e->getMessage());
-            return $this->json(['error' => 'Failed to fetch sectors. Please try again later.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -47,10 +47,10 @@ final class SectorController extends AbstractController
             return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         } catch (NoSessionException $e) {
             $this->logger->error('Session error: ' . $e->getMessage());
-            return $this->json(['error' => 'Session not available.'], Response::HTTP_BAD_REQUEST);
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_BAD_REQUEST);
         } catch (\Exception $e) {
             $this->logger->error('Unexpected error during save: ' . $e->getMessage());
-            return $this->json(['error' => 'An unexpected error occurred. Please try again later.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -67,7 +67,7 @@ final class SectorController extends AbstractController
             return $this->json(['error' => 'No user data found in session.'], Response::HTTP_NOT_FOUND);
         } catch (\Exception $e) {
             $this->logger->error('Error fetching user data: ' . $e->getMessage());
-            return $this->json(['error' => 'Failed to fetch user data. Please try again later.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
