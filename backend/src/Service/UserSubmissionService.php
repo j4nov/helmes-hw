@@ -60,6 +60,8 @@ final class UserSubmissionService
 
         $sessionId = $session->getId();
 
+        $this->logger->info($sessionId);
+
         if (empty($data['name']) || empty($data['sectors']) || !$data['agreed']) {
             throw new InvalidArgumentException('All fields are required.');
         }
@@ -137,8 +139,17 @@ final class UserSubmissionService
      */
     private function getSession(): SessionInterface
     {
-        return $this->requestStack->getSession() ?? throw new NoSessionException('No session available.');
-    }
+        $session = $this->requestStack->getSession();
 
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+
+        if (!$session->getId()) {
+            throw new NoSessionException('Session ID could not be generated.');
+        }
+
+        return $session;
+    }
 
 }
